@@ -35,6 +35,7 @@ func (decoder *Decoder) Decode() (*Molecule, error) {
 	}
 	molecule := &Molecule{Atoms: make([]*Atom, 0, 16)}
 
+	num := 0
 	i := -1
 	for decoder.scanner.Scan() {
 		line := strings.TrimSpace(decoder.scanner.Text())
@@ -43,7 +44,7 @@ func (decoder *Decoder) Decode() (*Molecule, error) {
 		// The first line should contain the number of atoms to read.
 		if i == 0 {
 			var err error
-			_, err = strconv.Atoi(line)
+			num, err = strconv.Atoi(line)
 			if err != nil {
 				decoder.err = ErrInvalidMolecule
 				return nil, decoder.err
@@ -54,6 +55,12 @@ func (decoder *Decoder) Decode() (*Molecule, error) {
 		// Next is the comment for the molecule.
 		if i == 1 {
 			molecule.Comment = line
+
+			// If no molecules need to be read break.
+			if num == 0 {
+				break
+			}
+
 			continue
 		}
 
@@ -86,6 +93,12 @@ func (decoder *Decoder) Decode() (*Molecule, error) {
 
 		atom := &Atom{Element: element, X: x, Y: y, Z: z}
 		molecule.Atoms = append(molecule.Atoms, atom)
+
+		// If we're at the last atom for the molecule break, that way
+		// we don't read items for another molecule.
+		if i == num+1 {
+			break
+		}
 	}
 
 	// If i hasn't been set, then it's EOF.

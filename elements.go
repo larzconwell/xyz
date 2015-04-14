@@ -8,9 +8,9 @@ import (
 
 var (
 	// ErrElementSymbol occurs when the symbol is unrecognized.
-	ErrElementSymbol = errors.New("xyz: element atomic symbol is unrecognized")
+	ErrElementSymbol = errors.New("xyz: elements atomic symbol is unrecognized")
 	// ErrElementNumber occurs when the given atomic number is out of range.
-	ErrElementNumber = errors.New("xyz: element atomic number is out of range")
+	ErrElementNumber = errors.New("xyz: elements atomic number is out of range")
 )
 
 // Element is a single elements atomic number.
