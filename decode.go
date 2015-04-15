@@ -39,6 +39,9 @@ func (decoder *Decoder) Decode() (*Molecule, error) {
 	i := -1
 	for decoder.scanner.Scan() {
 		line := strings.TrimSpace(decoder.scanner.Text())
+		if i == -1 && line == "" {
+			continue
+		}
 		i++
 
 		// The first line should contain the number of atoms to read.
